@@ -1,0 +1,15 @@
+{
+  "keys": [
+    {
+      "kty": "OKP",
+      "key_ops": [
+        "sign"
+      ],
+      "alg": "EdDSA",
+      "kid": "5e979c13-2e43-4058-bc89-f5f746ef719f",
+      "crv": "Ed25519",
+      "x": "bggTZ39_0cZJu6ayWgXGpeyfk88TMzethmrSi7kzDJM",
+      "d": "OjZkc_q4glUdPzDj3zfa70awP09KkB3X1d9E5BJlNnE"
+    }
+  ]
+}

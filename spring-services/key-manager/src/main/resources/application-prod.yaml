@@ -1,0 +1,8 @@
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+FRONTEND_ORIGIN: "http://localhost:8000"

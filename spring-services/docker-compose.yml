@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    restart: unless-stopped
+    command: ["postgres", "-p", "5433"]
+    environment:
+      - POSTGRES_DB=springdb
+      - POSTGRES_USER=spring
+      - POSTGRES_PASSWORD=springpass
+    ports:
+      - "5433:5433"
+    volumes:
+      - spring_postgres_data:/var/lib/postgresql/data
+    networks:
+      default:
+        aliases:
+          - springdb
+
+  key-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: key-manager
+    image: spring-key-manager:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://springdb:5433/springdb
+      - SPRING_DATASOURCE_USERNAME=spring
+      - SPRING_DATASOURCE_PASSWORD=springpass
+    ports:
+      - "8081:8081"
+    networks:
+      default:
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: api-gateway
+    image: spring-api-gateway:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=stage
+    ports:
+      - "8082:8082"
+    depends_on:
+      - key-manager
+    networks:
+      default:
+
+volumes:
+  spring_postgres_data:
+
+networks:
+  default:
+    external:
+      name: iam-network

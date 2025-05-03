@@ -1,0 +1,14 @@
+Qwen: Qwen2.5-1.5B-Instruct
+nvidia: AceInstruct-1.5B
+HuggingFaceTB: SmolLM2-1.7B-Instruct
+
+#spring:
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: http://localhost:8081
+#          jwk-set-uri: http://localhost:8081/v1/token/jwks
+
+JWK_KID: 5e979c13-2e43-4058-bc89-f5f746ef719f
+JWKS_URL: http://localhost:8081/v1/token/jwks
