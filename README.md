@@ -6,7 +6,7 @@
 
 ## Архитектура
 
-![Architecture Diagram](assets/architecture-ck.png)
+![Architecture Diagram](assets/architecture-ck.jpg)
 
 Основные компоненты:
 
