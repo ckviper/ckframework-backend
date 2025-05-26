@@ -4,19 +4,41 @@ server:
 spring:
   main:
     web-application-type: reactive
-
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "https://web.chatboxai.app "
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
+      httpclient:
+        connect-timeout: 1000
+        response-timeout: 10s
+        pool:
+          max-connections: 1000
+          max-idle-time: 60s
       routes:
         - id: chat_completions_route
-          uri: http://localhost:8081
+          uri: no://op
           predicates:
-            - Path=/v1/chat/completions
+            - Path=/api/v1/chat/completions
+            - Query=modelId
           filters:
-            - ModelRoutingFilter
+            - name: ModelRoutingFilter
+              args:
+                enabled: true
 
         - id: completions_route
-          uri: http://localhost:8081
+          uri: forward:/dynamic-routing
           predicates:
             - Path=/v1/completions
           filters:
@@ -31,11 +53,11 @@ models:
       endpoint: /v1/models/qwen
       host: 8081
 
-    - name: nvidia
+    - name: nvidea
       version: 1.5
       model_id: AceInstruct-1.5B
-      description: Модель AceInstruct с 1.5 миллиардами параметров от nvidia.
-      endpoint: /v1/models/nvidia
+      description: Модель AceInstruct с 1.5 миллиардами параметров от nvidea.
+      endpoint: /v1/models/nvidea
       host: 8082
 
     - name: HuggingFaceTB
@@ -44,3 +66,22 @@ models:
       description: Модель SmolLM2 с 1.7 миллиардами параметров от HuggingFaceTB, предназначенная для инструкций.
       endpoint: /v1/models/huggingfacetb
       host: 8083
+
+    - name: Meta
+      version: 1.7
+      model_id: llama3.2:1b
+      description: llama3.2:1b
+      endpoint: /v1/models/meta
+      host: 11434
+
+    - name: Mini llama
+      version: 1.7
+      model_id: tinyllama
+      description: tinyllama
+      endpoint: /v1/models/tinyllama
+      host: 11434
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
