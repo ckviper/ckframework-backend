@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 rootProject.name = "ckframework-spring-services"
 include("api-gateway")
 include("key-manager")
+include("billing")
