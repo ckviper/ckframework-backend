@@ -17,6 +17,23 @@ services:
         aliases:
           - springdb
 
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    restart: unless-stopped
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      default:
+        aliases:
+          - rabbitmq
+
   key-manager:
     build:
       context: .
@@ -31,6 +48,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=springpass
     ports:
       - "8081:8081"
+    depends_on:
+      - rabbitmq
     networks:
       default:
 
@@ -43,15 +62,21 @@ services:
     image: spring-api-gateway:latest
     environment:
       - SPRING_PROFILES_ACTIVE=stage
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=admin
+      - SPRING_RABBITMQ_PASSWORD=admin
     ports:
       - "8082:8082"
     depends_on:
       - key-manager
+      - rabbitmq
     networks:
       default:
 
 volumes:
   spring_postgres_data:
+  rabbitmq_data:
 
 networks:
   default:
