@@ -1,0 +1,18 @@
+server:
+  port: 9312
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5637
+    username: admin
+    password: admin
+  datasource:
+    username: admin
+    password: admin
+    url: ""
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
