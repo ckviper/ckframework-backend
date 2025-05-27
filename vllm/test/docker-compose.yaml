@@ -1,0 +1,58 @@
+services:
+  gpt2:
+    build: .
+    command: >
+      python -m vllm.entrypoints.openai.api_server
+      --model gpt2
+      --port 8000
+      --device cpu
+      --enforce-eager
+      --max-model-len 512
+    ports:
+      - "8001:8000"
+    environment:
+      - OPENAI_API_KEY=dummy-key
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2GB
+
+  gpt_neo:
+    image: python:3.10-slim
+    command: >
+      sh -c "pip install vllm && 
+      python -m vllm.entrypoints.openai.api_server
+      --model EleutherAI/gpt-neo-125M
+      --port 8000
+      --device cpu
+      --enforce-eager
+      --max-model-len 512"
+    ports:
+      - "8002:8000"
+    environment:
+      - OPENAI_API_KEY=dummy-key
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2GB
+
+  tinyllama:
+    build: .
+    command: >
+      python -m vllm.entrypoints.openai.api_server
+      --model TinyLlama/TinyLlama-1.1B-Chat-v1.0
+      --port 8000
+      --device cpu
+      --enforce-eager
+      --max-model-len 256
+    ports:
+      - "8003:8000"
+    environment:
+      - OPENAI_API_KEY=dummy-key
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 3GB
